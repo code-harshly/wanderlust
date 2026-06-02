@@ -1,0 +1,86 @@
+<% layout("/layouts/boilerplate") %>
+    <!--Leaflet's script-->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin="">
+   var map = L.map('map').setView([51.505, -0.09], 13);
+   </script>
+<div class="row">
+    <div class="col-8 offset-3 mt-3">
+    <h3><b><%= list.title %></b></h3>
+    </div>
+    <div class="card col-6 offset-3 listing-card" >
+        <img src="<%= list.image.url%>" class="card-img-top show-img" alt="listing_image">
+        <div class="card-body">
+          <p class="card-text"><b>OwnedBy: </b><%= list.owner.username %></p>
+          <p class="card-text"><%= list.description %><br></p>
+            <p class="card-text"> &#8377;<%= list.price %><br></p>
+              <p class="card-text"><%= list.location %><br></p>
+                <p class="card-text"><%= list.country %><br></p>
+        </div>
+      </div>
+      <% if(currUser && currUser._id.equals(list.owner._id)){%>
+      <div class="buttons">
+    <a href="/listing/<%= list._id%>/edit" class="btn btn-dark col-1 offset-3 edit-btn">EDIT</a>
+    <form method="post" action="/listing/<%= list._id%>/?_method=DELETE">
+        <button class="btn btn-dark offset-3">DELETE</button>
+    </form>
+</div>
+<%}%>
+<div class="col-8 offset-3 mt-3">
+  <% if(currUser) {%>
+<form method="post" action="/listing/<%= list._id%>/review"  novalidate class="needs-validation">
+  <hr>
+  <div class="mb-3 mt-3">
+    <label for="rating" class="form-label">Rating</label>
+  <fieldset class="starability-slot">
+    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+    <label for="first-rate1" title="Terrible">1 star</label>
+    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+    <label for="first-rate2" title="Not good">2 stars</label>
+    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+    <label for="first-rate3" title="Average">3 stars</label>
+    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+    <label for="first-rate4" title="Very good">4 stars</label>
+    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+    <label for="first-rate5" title="Amazing">5 stars</label>
+  </fieldset>
+  </div>
+  <div class="mb-3 mt-3">
+  <label for="comment" class="form-label">Comment</label>
+  <textarea class="form-control" id="comment" name="review[comment]" cols="30" rows="3" required ></textarea>
+  <div class="invalid-feedback">Please enter a short Review</div>
+  <br>
+  <button class="btn btn-dark add-btn">Submit</button>
+</div>
+</form>
+<%}%>
+<hr>
+<% if(list.review.length>0) {%>
+<p><b>All reviews </b></p>
+<%}%>
+<div class="row g-5 gx-2 me-4"> 
+<% for(review of list.review) {%>
+<div class="card col-md-6">
+  <div class="card-body">
+    <h5 class="card-title"><%= review.author.username %></h5> 
+    <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
+    <p class="card-text"><%= review.comment %></p> 
+</div>
+<% if(currUser && currUser._id.equals(review.author._id)){%>
+<form method="post" action="/listing/<%= list._id%>/review/<%= review.id%>/?_method=DELETE">
+  <button class="btn btn-dark mb-3 mt-3">Delete</button>
+</form>
+<%}%>
+</div>
+<%}%>
+</div>
+</div>
+  </div>
+  <div class="col-8 offset-3 mt-3">
+    <h3>Location</h3>
+    <div id="map"></div>
+    <script src="/js/map.js"></script>
+</div>
+</div>
