@@ -84,6 +84,10 @@ app.use("/listing",listingRouter);
 app.use("/listing/:id/review",reviewsRouter);
 app.use("/",userRouter);
 
+app.get("/",(req,res)=>{
+    res.redirect("/listing")
+})
+
 app.listen(8080,(req,res)=>{
     console.log("port is active");
 });
