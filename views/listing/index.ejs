@@ -1,8 +1,9 @@
 <% layout("/layouts/boilerplate") %>
+
 <body> 
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1"><%for(let list of alllisting) {%> 
     <a class="listinglink" href="/listing/<%= list._id%>">
-        <div class="card listing-card">
+        <div class="card listing-card pt-3">
         <img src="<%= list.image.url%>" class="card-img-top" alt="Listing_image" style="height: 20rem;">
         <div class="card-body">
           <b><p class="card-text"><%=list.title%></b><br>
